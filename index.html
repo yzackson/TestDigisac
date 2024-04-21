@@ -6,6 +6,10 @@
     <title>Document</title>
 </head>
 <body>
-    <p>Hello World</p>
+    <p id="paragraph">Hello World</p>
+    <script>
+        const currentUrl = window.location.href;
+        document.getElementById("paragraph").innerHTML = currentUrl
+    </script>
 </body>
 </html>
