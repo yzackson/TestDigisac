@@ -33,13 +33,13 @@ class RDIntegrationController extends Controller
     private function getDigisacMessage($url)
     {
         // Token de autenticação
-        $token = 'e8d47293577d878aa2efd79a552ad7813401f096';
+        $token = env('DIGISACTOKEN');
 
         // Realiza a requisição HTTP GET com o cabeçalho de autorização
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
-        ])->get($url);
+            ])->get('https://camisetasparana.digisac.biz/api/v1/messages/{$url}');
 
         // Verifica se a requisição foi bem-sucedida
         if ($response->successful()) {
