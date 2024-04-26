@@ -1,0 +1,114 @@
+{
+  "deal_stages": [
+    {
+      "_id": "64921c470ebe800010eeddb3",
+      "id": "64921c470ebe800010eeddb3",
+      "name": "NOVO CONTATO",
+      "nickname": "NC",
+      "order": 1,
+      "configuration": [],
+      "created_at": "2023-06-20T18:38:15.912-03:00",
+      "updated_at": "2023-06-20T18:38:54.356-03:00",
+      "instance_id": "629f76cbc6eff20014c20a15",
+      "objective": null,
+      "description": null,
+      "deal_pipeline": {
+        "id": "629f76e4f8bd9e0012cea59b",
+        "name": "Vendas",
+        "order": 1
+      }
+    },
+    {
+      "_id": "629f76e4f8bd9e0012cea59c",
+      "id": "629f76e4f8bd9e0012cea59c",
+      "name": "EM CONTATO",
+      "nickname": "EC",
+      "order": 2,
+      "configuration": [],
+      "created_at": "2022-06-07T13:03:48.760-03:00",
+      "updated_at": "2023-06-20T18:39:03.975-03:00",
+      "instance_id": "629f76cbc6eff20014c20a15",
+      "objective": null,
+      "description": null,
+      "deal_pipeline": {
+        "id": "629f76e4f8bd9e0012cea59b",
+        "name": "Vendas",
+        "order": 1
+      }
+    },
+    {
+      "_id": "629f76e4f8bd9e0012cea59d",
+      "id": "629f76e4f8bd9e0012cea59d",
+      "name": "PROPOSTA ENVIADA",
+      "nickname": "PE",
+      "order": 3,
+      "configuration": [],
+      "created_at": "2022-06-07T13:03:48.771-03:00",
+      "updated_at": "2023-11-30T09:13:42.804-03:00",
+      "instance_id": "629f76cbc6eff20014c20a15",
+      "objective": null,
+      "description": null,
+      "deal_pipeline": {
+        "id": "629f76e4f8bd9e0012cea59b",
+        "name": "Vendas",
+        "order": 1
+      }
+    },
+    {
+      "_id": "629f76e4f8bd9e0012cea59f",
+      "id": "629f76e4f8bd9e0012cea59f",
+      "name": "PEDIDO FECHADO",
+      "nickname": "PF",
+      "order": 4,
+      "configuration": [],
+      "created_at": "2022-06-07T13:03:48.797-03:00",
+      "updated_at": "2023-11-30T09:13:57.278-03:00",
+      "instance_id": "629f76cbc6eff20014c20a15",
+      "objective": null,
+      "description": null,
+      "deal_pipeline": {
+        "id": "629f76e4f8bd9e0012cea59b",
+        "name": "Vendas",
+        "order": 1
+      }
+    },
+    {
+      "_id": "64623d54c4ce280010655620",
+      "id": "64623d54c4ce280010655620",
+      "name": "NÃO FECHOU",
+      "nickname": "NF",
+      "order": 5,
+      "configuration": [],
+      "created_at": "2023-05-15T11:10:28.411-03:00",
+      "updated_at": "2023-11-30T09:13:57.313-03:00",
+      "instance_id": "629f76cbc6eff20014c20a15",
+      "objective": null,
+      "description": null,
+      "deal_pipeline": {
+        "id": "629f76e4f8bd9e0012cea59b",
+        "name": "Vendas",
+        "order": 1
+      }
+    },
+    {
+      "_id": "649209537a2a8900221ffdf2",
+      "id": "649209537a2a8900221ffdf2",
+      "name": "Camiseta Lisa",
+      "nickname": "CL",
+      "order": 6,
+      "configuration": [],
+      "created_at": "2023-06-20T17:17:23.800-03:00",
+      "updated_at": "2023-11-30T09:13:47.083-03:00",
+      "instance_id": "629f76cbc6eff20014c20a15",
+      "objective": null,
+      "description": null,
+      "deal_pipeline": {
+        "id": "629f76e4f8bd9e0012cea59b",
+        "name": "Vendas",
+        "order": 1
+      }
+    }
+  ],
+  "total": 6,
+  "has_more": false
+}
