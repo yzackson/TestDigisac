@@ -4,25 +4,35 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\View;
 
 class RDIntegrationController extends Controller
 {
-    public function Index(Request $request) {
-        // Obtém o parâmetro "message" da URL GET
+    public function UpdateOrganization(Request $request) {
+        // Obtém o ID da mensagem passado no parãmetro "message"
         $message = $request->input('message');
 
-        // Chama a função getDigisacMessage com o parâmetro recebido
-        $response = $this->getDigisacMessage($message);
-        $jObj = json_decode($response);
+        // Extrai somente o conteúdo da mensagem
+        $message_text = $this->getDigisacMessageText($message);
+        $message_text_value = json_decode($message_text);
 
+        $text_field = $this->stringToJson($message_text_value->text);
         
 
         // Retorna os dados em formato JSON
-        return $this->stringToJson($jObj->text);
+        //return $this->stringToJson($message_text_value->text);
+        return view::make('formToValidateData', ['cpfCnpj' => $text_field->CEP,
+            'razaoSocial' => 'e',
+            'ie' => 'um',
+            'cep' => 'teste',
+            'endereco' => 'de',
+            'bairro' => 'envio',
+            'estado' => 'de',
+            'email' => 'formulario'
+        ]);
     }
 
-    
-    private function getDigisacMessage($url)
+    private function getDigisacMessageText($url)
     {
         // Token de autenticação
         $token = env('DIGISACTOKEN');
@@ -43,29 +53,8 @@ class RDIntegrationController extends Controller
         }
     }
 
-
-
-
-    /*
-    private function createOrganizationRD($body)
+    private function stringToJson($string) 
     {
-        // Realiza a requisição HTTP POST para criar uma organização no RD Station
-        $response = Http::post('https://crm.rdstation.com/api/v1/organizations', json_decode($body, true));
-
-        // Verifica se a requisição foi bem-sucedida
-        if ($response->successful()) {
-            // Retorna o conteúdo da resposta
-            return $response->body();
-        } else {
-            // Em caso de falha na requisição, retorna uma mensagem de erro
-            return response()->json(['error' => 'Erro ao criar a organização no RD Station.'], $response->status());
-        }
-    }
-
-
-*/
-
-    private function stringToJson($string) {
         // Divide a string em linhas
         $lines = explode("\n", $string);
         
