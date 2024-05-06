@@ -46,6 +46,9 @@
                         <label for="email" class="form-label">Email</label>
                         <input type="text" class="form-control" id="email" name="email" value="{{ $email }}">
                     </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="contactId" name="contactId" value="{{ $contactId }}" hidden>
+                    </div>
                     <button type="submit" class="btn btn-primary">Enviar</button>
                 </form>
             </div>

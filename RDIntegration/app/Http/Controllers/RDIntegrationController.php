@@ -13,26 +13,24 @@ class RDIntegrationController extends Controller
         $message = $request->input('message');
 
         // Extrai somente o conteúdo da mensagem
-        $message_text = $this->getDigisacMessageText($message);
-        $message_text_value = json_decode($message_text);
-
-        $text_field = $this->stringToJson($message_text_value->text);
-        
+        $message = $this->getDigisacMessage($message);
+        $message_text = json_decode($message);
 
         // Retorna os dados em formato JSON
-        //return $this->stringToJson($message_text_value->text);
-        return view::make('formToValidateData', ['cpfCnpj' => $text_field->CEP,
-            'razaoSocial' => 'e',
-            'ie' => 'um',
-            'cep' => 'teste',
-            'endereco' => 'de',
-            'bairro' => 'envio',
-            'estado' => 'de',
-            'email' => 'formulario'
+        $json_text = json_decode($this->stringToJson($message_text->text), true);
+        return view::make('formToValidateData', ['cpfCnpj' => $json_text['CPF/CNPJ'],
+            'razaoSocial' => $json_text['Razão Social'],
+            'ie' => $json_text['Inscrição Estadual'],
+            'cep' => $json_text['CEP'],
+            'endereco' => $json_text['Endereço'],
+            'bairro' => $json_text['Bairro'],
+            'estado' => $json_text['Estado'],
+            'email' => $json_text['Email'],
+            'contactId' => $message_text->contactId
         ]);
     }
 
-    private function getDigisacMessageText($url)
+    private function getDigisacMessage($url)
     {
         // Token de autenticação
         $token = env('DIGISACTOKEN');
@@ -75,7 +73,7 @@ class RDIntegrationController extends Controller
         }
         
         // Converte o array associativo para JSON
-        $json = json_encode($dataArray, JSON_UNESCAPED_UNICODE);
+        $json = json_encode($dataArray, JSON_UNESCAPED_UNICODE, true);
         
         return $json;
     }
