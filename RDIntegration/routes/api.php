@@ -13,6 +13,4 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/UpdateOrganization', [RDIntegrationController::class, 'UpdateOrganization']);
 Route::post('/SendToRd', [SendToRd::class, 'Send']);
-
-
 Route::post('/BotNewContact', [CadastraOportunidadeController::class, 'Index']);

@@ -5,21 +5,32 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Log;
 
 class SendToRd extends Controller
 {
     public function Send(Request $request) {
-        $contact_id = $request["contactId"];
+        try {
+          $contact_id = $request["contactId"];
 
-        $full_contact = json_decode($this->GetDigiSacContact($contact_id));
-        $full_contact_data_number = $full_contact->data;
+          $full_contact = json_decode($this->GetDigiSacContact($contact_id));
+          $full_contact_data_number = $full_contact->data;
 
-        $organization_id = DB::select('SELECT organization_id FROM contact_organization WHERE name = ? and number = ?', [$full_contact->name, $full_contact_data_number->number]);
+          $organization_id = DB::select('SELECT organization_id FROM contact_organization WHERE name = ? and number = ?', [$full_contact->name, $full_contact_data_number->number]);
+        } catch (\Throwable $th) {
+          return "Ocorreu um erro. Contacto o mantenedor: " . $th->__toString();
+        }
 
-        $response = $this->UpdateCompanyOnRD($organization_id[0]->organization_id,$request);
-
-        //return $response;
+        if($organization_id != null) {
+          $response = $this->UpdateCompanyOnRD($organization_id[0]->organization_id,$request);  
+          if($response != typeOf(1)) {
+            Log::info("Cliente atualizado com sucesso: " . $response);
+            return "Cliente atualizado com sucesso";
+          }
+        } else {
+          Log::error("Organization ID not found. Contact: " . $full_contact);
+          return "Organization ID not found. Contact: " . $full_contact;
+        }
     }
 
 
@@ -30,10 +41,14 @@ class SendToRd extends Controller
         $token = env('DIGISACTOKEN');
 
         // Realiza a requisição HTTP GET com o cabeçalho de autorização
-        $response = Http::withHeaders([
+        try {
+          $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
             ])->get("https://camisetasparana.digisac.biz/api/v1/contacts/{$contact_id}");
+        } catch (\Throwable $th) {
+          throw $th;
+        }
 
         // Verifica se a requisição foi bem-sucedida
         if ($response->successful()) {
@@ -52,7 +67,8 @@ class SendToRd extends Controller
         $token = env('RDTOKEN');
 
         // Realiza a requisição HTTP GET com o cabeçalho de autorização
-        $response = Http::withHeaders([
+        try {
+          $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-type' => 'application/json'
             ])->put("https://crm.rdstation.com/api/v1/organizations/{$organization_id}?token={$token}", [
@@ -93,6 +109,9 @@ class SendToRd extends Controller
                   ]
               ]
             ]);
+        } catch (\Throwable $th) {
+          throw $th;
+        }
 
         // Verifica se a requisição foi bem-sucedida
         if ($response->successful()) {
