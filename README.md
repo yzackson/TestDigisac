@@ -149,7 +149,15 @@ Novo contato passando pelo bot
 Cliente fechado e com dados preenchidos
 1. Vendedor aciona a função "Atualizar RD"
 2. A API pega os dados da mensagem na qual o vendedor clicou e confere os dados
+    ```
+    CPF/CNPJ: 610.806.989-90
+    Razão Social: Google Brasil Internet Ltda
+    Inscrição Estadual: 346521879
+    CEP: 79010-010
+    Endereço: Rua Abrão Júlio Rahe, 972
+    Bairro: Centro
+    Estado: Campo Grande
+    Email: MS
+    ```
 3. Clica em "enviar" no formulario de validação
 4. A API busca o id da organização do cliente no banco de dados e envia os dados para o RD
-
-
