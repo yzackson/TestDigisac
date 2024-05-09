@@ -6,6 +6,8 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class RDIntegrationController extends Controller
 {
@@ -14,25 +16,78 @@ class RDIntegrationController extends Controller
      */
     public function UpdateOrganization(Request $request): \Illuminate\Contracts\View\View
     {
-        // Obtém o ID da mensagem passado no parãmetro "message"
-        $message = $request->input('message');
+        try {
+            Log::debug("Requisição para atualizar cliente recebida: $request");
+            // Obtém o ID da mensagem passado no parãmetro "message"
+            $message = $request->input('message');
 
-        // Extrai somente o conteúdo da mensagem
-        $message = $this->getDigisacMessage($message);
-        $message_text = json_decode($message);
+            // Extrai somente o conteúdo da mensagem
+            $message = $this->getDigisacMessage($message);
+            $message_text = json_decode($message);
 
-        // Retorna os dados em formato JSON
-        $json_text = json_decode($this->stringToJson($message_text->text), true);
-        return view::make('formToValidateData', ['cpfCnpj' => $json_text['CPF/CNPJ'],
-            'razaoSocial' => $json_text['Razão Social'],
-            'ie' => $json_text['Inscrição Estadual'],
-            'cep' => $json_text['CEP'],
-            'endereco' => $json_text['Endereço'],
-            'bairro' => $json_text['Bairro'],
-            'estado' => $json_text['Estado'],
-            'email' => $json_text['Email'],
-            'contactId' => $message_text->contactId
-        ]);
+
+
+
+            $cpfCnpj = "";
+            $razaoSocial = "";
+            $ie = "";
+            $cep = "";
+            $endereco = "";
+            $bairro = "";
+            $estado = "";
+            $email = "";
+            
+            // Retorna os dados em formato JSON
+            $json_text = json_decode($this->stringToJson($message_text->text), true);
+            foreach ($json_text as $key => $value) {
+                if(str_contains(strtoupper($key), "CPF") || str_contains(strtoupper($key), "CNPJ")){
+                    $cpfCnpj = $value;
+                } 
+
+                if(str_contains(strtoupper($key), "NOME FANTASIA")){
+                    $fantasia = $value;
+                } else if(str_contains(strtoupper($key), "NOME") || str_contains(strtoupper($key), "RAZÃO SOCIAL")){
+                    $razaoSocial = $value;
+                }
+                
+                if(str_contains(strtoupper($key), "IE") || str_contains(strtoupper($key), "I.E.")){
+                    $ie = $value;
+                } 
+
+                if(str_contains(strtoupper($key), "CEP")){
+                    $cep = $value;
+                } 
+
+                if(str_contains(strtoupper($key), "ENDERECO") || str_contains(strtoupper($key), "ENDEREÇO")){
+                    $endereco = $value;
+                } 
+
+                if(str_contains(strtoupper($key), "BAIRRO") || str_contains(strtoupper($key), "BAIRO") || str_contains(strtoupper($key), "BARRO")){
+                    $bairro = $value;
+                } 
+                if(str_contains(strtoupper($key), "ESTADO") || str_contains(strtoupper($key), "UF")){
+                    $estado = $value;
+                } 
+
+                if(str_contains(strtoupper($key), "EMAIL") || str_contains(strtoupper($key), "E-MAIL") || str_contains(strtoupper($key), "E MAIL")){
+                    $email = $value;
+                } 
+            }
+
+            return view::make('formToValidateData', ['cpfCnpj' => $cpfCnpj,
+                'razaoSocial' => $razaoSocial,
+                'ie' => $ie,
+                'endereco' => $endereco,
+                'bairro' => $bairro,
+                'estado' => $estado,
+                'cep' => $cep,
+                'email' => $email,
+                'contactId' => $message_text->contactId
+            ]);
+        } catch (Throwable $ex) {
+            Log::error("Something went wrong: " . $ex);
+            return view::make("Something went wrong: " . $ex);
+        }
     }
 
     /**
